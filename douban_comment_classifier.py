@@ -59,6 +59,21 @@ MULTI_PROMPT_PROMPT_PREFIX = """
 """
 
 
+def load_csv_data(data_path: str, sample_num=20):
+    """
+    一条条的预测豆瓣电影短评的分数
+    :param data_path: 数据路径
+    :param sample_num: 抽样数量
+    :return:
+    """
+    # 读取CSV文件
+    df = pd.read_csv(data_path)
+
+    # 随机抽取数据
+    df = df.sample(sample_num)
+    print(df.to_json(indent=4, force_ascii=False))
+
+
 def chat_with_sdk_in_stream(prompt, model="gpt-3.5-turbo"):
     """
     以流式的方式请求，因为访问api.chatanywhere.com.cn的时候，会出现超时的情况，所以需要以流式的方式请求,否则计费会出现问题
@@ -209,6 +224,7 @@ def predict_douban_comment_star_batch(data_path: str, sample_num=20, batch_size=
 
 
 if __name__ == '__main__':
+    load_csv_data("data/DMSC.csv", 20)
     # print(chat_with_sdk_in_stream("hello", "gpt-3.5-turbo"))
     # print(classify_single_douban_comment("复仇者联盟2", "只有一颗彩蛋必须降一星。外加漫威的编剧是有心无力了吧。复仇者联盟只能永远着手与团队的和与不和。这种东西重复到第二次就是隔了三年，还是心有余而力不足吧。只好来三个新成员，但是认真地，有必要加一条家庭线么？妇联以后也是要走赛车帮的，we are familly 路线？？？"))
     # print(classify_multi_douban_comment([("复仇者联盟2", "粉丝向电影+全明星阵容，还是三部曲里的第1.5部续集，直接导致细节梗太多，每个角色都要照顾以至于顾不上故事节奏，叙事还要照顾到承上启下，结果整体都有点怪怪的。"),
@@ -216,4 +232,4 @@ if __name__ == '__main__':
     #                                      ("复仇者联盟2","刘大勇贾秀琰师徒真是狙击资本主义巨制界的先锋"),
     #                                      ("复仇者联盟2","好莱坞造梦境界依旧。值得表扬的是开头第一个镜头，其镜头运动设计的惊险流畅，大量低角度和超级特写的交代让人生理迅速发生反应，几乎马上进入情节。（那个慢速有点傻可是是给雷神的好吧）故事模式还是一样，反正...")]))
     # predict_douban_comment_star_one_by_one("data/DMSC.csv", 50)
-    predict_douban_comment_star_batch("data/DMSC.csv", 50, 5)
+    # predict_douban_comment_star_batch("data/DMSC.csv", 50, 5)
